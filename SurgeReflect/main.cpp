@@ -31,15 +31,6 @@ void DumpVariables(const SurgeReflect::Class* clazz)
     }
 }
 
-class Cake
-{
-public:
-    uint32_t Weight = 100; // In KiloGrams
-    uint32_t Price = 20;   // In dollars
-    short TastyMeter = 'a';
-    SURGE_REFLECTION_ENABLE;
-};
-
 class TestStruct
 {
 public:
@@ -47,49 +38,32 @@ public:
 
 protected:
     VecKek Y = {0.0f, 0.0f};
+    void EatCake() {}
 
 private:
     uint64_t Z = 0;
     CakeType CakeEnum = CakeType::Mud;
-    Cake TheRealCake;
     SURGE_REFLECTION_ENABLE;
 };
 
 int main()
 {
+    const SurgeReflect::Class* clazz = SurgeReflect::GetReflection<TestStruct>();
+    const SurgeReflect::Variable* var = clazz->GetVariable("CakeEnum");
+    if (var)
     {
-        const SurgeReflect::Class* clazz = SurgeReflect::GetReflection<TestStruct>();
-        const SurgeReflect::Variable* var = clazz->GetVariable("TheRealCake");
-        if (var)
-        {
-            const SurgeReflect::Type& typee = var->GetType();
+        const SurgeReflect::Type& typee = var->GetType();
 
-            auto name = var->GetName();
-            auto size = var->GetSize();
-            auto isPrimitive = typee.IsPrimitive();
-            auto isEnum = typee.IsEnum();
-            auto isClass = typee.IsClass();
-            auto isUnion = typee.IsUnion();
-            bool isCake = typee.EqualTo<Cake>();
-        }
+        auto name = var->GetName();
+        auto size = var->GetSize();
+        auto isPrimitive = typee.IsPrimitive();
+        auto isEnum = typee.IsEnum();
+        auto isClass = typee.IsClass();
+        auto isUnion = typee.IsUnion();
+        bool isCake = typee.EqualTo<CakeType>();
     }
 
-    {
-        const SurgeReflect::Class* clazz = SurgeReflect::GetReflection<Cake>();
-        const SurgeReflect::Variable* var = clazz->GetVariable("TastyMeter");
-        if (var)
-        {
-            const SurgeReflect::Type& typee = var->GetType();
-
-            std::string name = var->GetName();
-            uint64_t size = var->GetSize();
-            bool isPrimitive = typee.IsPrimitive();
-            bool isEnum = typee.IsEnum();
-            bool isClass = typee.IsClass();
-            bool isUnion = typee.IsUnion();
-            bool isCake = typee.EqualTo<Cake>();
-        }
-    }
+    const SurgeReflect::Function* func = clazz->GetFunction("EatCake");
 
     //DumpVariables(testStruct);
 
@@ -99,17 +73,10 @@ int main()
 // Reflection Register
 
 // clang-format off
-SURGE_REFLECT_CLASS_REGISTER_BEGIN(Cake)
-    .AddVariable<&Cake::Weight>("Weight", SurgeReflect::AccessModifier::Public)
-    .AddVariable<&Cake::Price>("Price", SurgeReflect::AccessModifier::Public)
-    .AddVariable<&Cake::TastyMeter>("TastyMeter", SurgeReflect::AccessModifier::Public)
-SURGE_REFLECT_CLASS_REGISTER_END(Cake)
-
-
 SURGE_REFLECT_CLASS_REGISTER_BEGIN(TestStruct)
     .AddVariable<&TestStruct::X>("X", SurgeReflect::AccessModifier::Public)
     .AddVariable<&TestStruct::Y>("Y", SurgeReflect::AccessModifier::Protected)
     .AddVariable<&TestStruct::Z>("Z", SurgeReflect::AccessModifier::Private)
     .AddVariable<&TestStruct::CakeEnum>("CakeEnum", SurgeReflect::AccessModifier::Private)
-    .AddVariable<&TestStruct::TheRealCake>("TheRealCake", SurgeReflect::AccessModifier::Private)
+    .AddFunction<&TestStruct::EatCake>("EatCake", SurgeReflect::AccessModifier::Protected)
 SURGE_REFLECT_CLASS_REGISTER_END(TestStruct)

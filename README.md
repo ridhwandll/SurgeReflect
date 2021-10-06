@@ -13,7 +13,7 @@ If you know all the above mentioned things, integrating SurgeReflect is **dead e
 
 - No RTTI required, you can safely turn it **off**
 - Mostly header only
-- You can reflect Classes, Structs, Enums (coming soon!)
+- You can reflect Classes, Structs
 - Iterate over members (`clazz->GetVariables()`)
 - Register only what you need
 - Compiles with Visual Studio and Clang (should work with GCC too, but not tested)
@@ -30,6 +30,7 @@ class Cake
 {
 public:
     unsigned int Weight = 100;
+    void ANiceFunctionThatDoesNothing() {}
 private:
     float Price = 20;
     SURGE_REFLECTION_ENABLE;
@@ -45,10 +46,11 @@ Now reflect, the struct, you **must do the following in a source file(.cpp file)
 SURGE_REFLECT_CLASS_REGISTER_BEGIN(Cake)
     .AddVariable<&Cake::Weight>("Weight", SurgeReflect::AccessModifier::Public)
     .AddVariable<&Cake::Price>("Price", SurgeReflect::AccessModifier::Private)
+    .AddFunction<&Cake::ANiceFunctionThatDoesNothing>("ANiceFunctionThatDoesNothing", SurgeReflect::AccessModifier::Public)
 SURGE_REFLECT_CLASS_REGISTER_END(Cake)
 // Here 🔼
 
-//Hhackerman code ...
+//Hackerman code ...
 ```
 It is pretty self explanatory, you just register the members like above with **correct name and access modifier**. Now you can get the juice of your work, everything is ready now, time to use this Reflection!
 In `main.cpp`(or any other code place that is executed), you can query if `Cake` class has a member or not, if it has, then you can get information about that member! Here is a juicy example:
@@ -61,7 +63,7 @@ int main()
 {
     const SurgeReflect::Class* clazz = SurgeReflect::GetReflection<Cake>();
     const SurgeReflect::Variable* var = clazz->GetVariable("Price");
-	// var will be nullptr if the variable name "Price" was not registered
+    // var will be nullptr if the variable name "Price" was not registered
     if (var)    
     {
         const SurgeReflect::Type& typee = var->GetType();
@@ -75,7 +77,7 @@ int main()
 
         // You can check if is equal to another type without RTTI enabled!
         bool isDouble = typee.EqualTo<double>();// false
-        bool isUint = typee.EqualTo<float>();   // true
+        bool isFloat = typee.EqualTo<float>();   // true
     }
     
     // You can iterate through all the registered variables like this

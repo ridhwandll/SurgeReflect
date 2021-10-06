@@ -1,3 +1,4 @@
+// Copyright (c) - SurgeTechnologies - All rights reserved
 #pragma once
 #include <string>
 
@@ -57,7 +58,7 @@ namespace SurgeReflect
         template <>
         inline constexpr std::string_view GetTypeName<short>()
         {
-            return "sort";
+            return "short";
         }
 
         template <>
@@ -100,6 +101,18 @@ namespace SurgeReflect
         inline constexpr std::string_view GetTypeName<unsigned long long>()
         {
             return "unsigned long long";
+        }
+
+        template <>
+        inline constexpr std::string_view GetTypeName<char>()
+        {
+            return "char";
+        }
+
+        template <>
+        inline constexpr std::string_view GetTypeName<wchar_t>()
+        {
+            return "wchar_t";
         }
 
         template <class T>

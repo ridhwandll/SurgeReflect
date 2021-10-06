@@ -1,3 +1,4 @@
+// Copyright (c) - SurgeTechnologies - All rights reserved
 #pragma once
 #include <string>
 #include <functional>

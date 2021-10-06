@@ -1,6 +1,8 @@
+// Copyright (c) - SurgeTechnologies - All rights reserved
 #pragma once
 #include "SurgeReflect/Variable.hpp"
 #include "SurgeReflect/TypeTraits.hpp"
+#include "SurgeReflect/Function.hpp"
 #include <unordered_map>
 
 namespace SurgeReflect
@@ -14,15 +16,25 @@ namespace SurgeReflect
 
         const std::string& GetName() const { return mName; }
         const std::unordered_map<std::string, Variable>& GetVariables() const { return mVariables; }
+        const std::unordered_map<std::string, Function>& GetFunctions() const { return mFunctions; }
 
         template <auto Var>
         Class& AddVariable(const std::string& name, AccessModifier accessModifier)
         {
             using Traits = TypeTraits::VariableTraits<decltype(Var)>;
 
-            Variable v(name, accessModifier);
-            v.Initialize<Traits::Type>();
-            mVariables[v.GetName()] = v; // Store the variable
+            Variable var(name, accessModifier);
+            var.Initialize<Traits::Type>();
+            mVariables[var.GetName()] = var; // Store the variable
+            return *this;
+        }
+
+        template <auto Func>
+        Class& AddFunction(const std::string& name, AccessModifier accessModifier)
+        {
+            Function fun(name, accessModifier);
+            fun.Initialize<Func>();
+            mFunctions[fun.GetName()] = fun;
             return *this;
         }
 
@@ -35,6 +47,17 @@ namespace SurgeReflect
             return nullptr;
         }
 
+        const Function* GetFunction(const std::string& name) const
+        {
+            auto itr = mFunctions.find(name);
+            if (itr != mFunctions.end())
+                return &itr->second;
+
+            return nullptr;
+        }
+
+        const bool& IsSetup() const { return mSetup; }
+
     private:
         void SetupClass(Class&& clazz)
         {
@@ -43,9 +66,11 @@ namespace SurgeReflect
 
             mVariables.reserve(clazz.GetVariables().size());
             for (auto& [name, variable] : clazz.mVariables)
-            {
                 mVariables[name] = variable;
-            }
+
+            mFunctions.reserve(clazz.GetFunctions().size());
+            for (auto& [name, func] : clazz.mFunctions)
+                mFunctions[name] = func;
 
             mSetup = true;
         }
@@ -54,6 +79,7 @@ namespace SurgeReflect
         bool mSetup = false;
         std::string mName;
         std::unordered_map<std::string, Variable> mVariables;
+        std::unordered_map<std::string, Function> mFunctions;
         friend class Registry;
     };
 

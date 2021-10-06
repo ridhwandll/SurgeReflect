@@ -1,7 +1,8 @@
 #pragma once
-#include "Registry.hpp"
+#include "SurgeReflect/Registry.hpp"
+#include "SurgeReflect/Type.hpp"
 
-#define SURGE_REFLECT_REGISTER                          \
+#define SURGE_REFLECTION_ENABLE                         \
 private:                                                \
     static struct ReflectionRegister                    \
     {                                                   \
@@ -9,7 +10,7 @@ private:                                                \
         void CookClassData(SurgeReflect::Class& clazz); \
     } sReflectionRegister
 
-#define SURGE_REFLECT_REGISTER_BEGIN(ClassName)                                   \
+#define SURGE_REFLECT_CLASS_REGISTER_BEGIN(ClassName)                             \
     ClassName::ReflectionRegister ClassName::sReflectionRegister;                 \
     ClassName::ReflectionRegister::ReflectionRegister()                           \
     {                                                                             \
@@ -23,7 +24,7 @@ private:                                                \
 
 // clang-format off
 
-#define SURGE_REFLECT_REGISTER_END(ClassName) ;}
+#define SURGE_REFLECT_CLASS_REGISTER_END(ClassName) ;}
 
 // clang-format on
 
@@ -32,7 +33,7 @@ namespace SurgeReflect
     template <typename T>
     const Class* GetReflection()
     {
-        std::string className = std::string(GetClassName<T>());
+        std::string className = std::string(TypeTraits::GetClassName<T>());
         const Class* clazz = Registry::Get()->GetClass(className);
         return clazz;
     }

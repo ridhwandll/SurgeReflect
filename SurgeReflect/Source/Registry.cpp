@@ -18,10 +18,10 @@ namespace SurgeReflect
 
     Class* Registry::GetClass(const std::string& name)
     {
-        auto itr = mClasses.find(std::string(name));
+        auto itr = mClasses.find(name);
         if (itr != mClasses.end())
             return itr->second;
-        return mClasses.insert({std::string(name), new Class(name)}).first->second;
+        return mClasses.insert({name, new Class(name)}).first->second;
     }
 
     void Registry::Shutdown()

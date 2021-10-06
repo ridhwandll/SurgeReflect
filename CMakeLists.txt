@@ -9,13 +9,13 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 # ------------------------------------
 
 file(GLOB_RECURSE SOURCE_FILES
-    Source/*.cpp
-    Source/*.hpp 
+    SurgeReflect/*.cpp
+    SurgeReflect/*.hpp 
 )
 
 set(INCLUDE_DIRS
-    Source
-    Source/Include
+    SurgeReflect/Source
+    SurgeReflect/Include
 )
 
 set(LIB_LINKS)

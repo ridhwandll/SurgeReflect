@@ -1,6 +1,19 @@
 ﻿# SurgeReflect
 A *Fast*, *Portable* and *Easy to use* C++17 Reflection Library
 
+## Features
+
+- No RTTI required, you can safely turn it **off**
+- Mostly header only
+- You can reflect **Classes**, **Structs**
+  - **Members** & **Functions** that belongs to a class/struct, with **Access Modifier**
+- Iterate over members **(`clazz->GetVariables()`)**
+- Iterate over functions **(`clazz->GetFunctions()`)**
+- Register only what you need
+- Compiles with MSVC and Clang (should work with GCC too, but not tested)
+- Easy to use API
+- It's fast?
+
 ## Integrating SurgeReflect in your project
 We assume that,
 -  You are familiar enough with C++, you know what Static and Dynamic Libraries are in C++
@@ -8,16 +21,6 @@ We assume that,
 - You know what include directories are in C++ and you know how to set them
 
 If you know all the above mentioned things, integrating SurgeReflect is **dead easy**. Copy all the files from `SurgeReflect` except `main.cpp`(you can look in `main.cpp` for examples), set the include directory  to `SurgeReflect/Source/Include`, compile the project as a shared or a static library, link it to your application and done!
-
-## Features
-
-- No RTTI required, you can safely turn it **off**
-- Mostly header only
-- You can reflect Classes, Structs
-- Iterate over members (`clazz->GetVariables()`)
-- Register only what you need
-- Compiles with Visual Studio and Clang (should work with GCC too, but not tested)
-- It's fast?
 
 ## Examples
 
@@ -30,7 +33,7 @@ class Cake
 {
 public:
     unsigned int Weight = 100;
-    void ANiceFunctionThatDoesNothing() {}
+    int AddCake(int a, int b) { return a + b; }
 private:
     float Price = 20;
     SURGE_REFLECTION_ENABLE;
@@ -42,18 +45,17 @@ Now reflect, the struct, you **must do the following in a source file(.cpp file)
 #include "Cake.h"
 //Other good code ...
 
+// Global namespace
 // Here 🔽
 SURGE_REFLECT_CLASS_REGISTER_BEGIN(Cake)
     .AddVariable<&Cake::Weight>("Weight", SurgeReflect::AccessModifier::Public)
     .AddVariable<&Cake::Price>("Price", SurgeReflect::AccessModifier::Private)
-    .AddFunction<&Cake::ANiceFunctionThatDoesNothing>("ANiceFunctionThatDoesNothing", SurgeReflect::AccessModifier::Public)
+    .AddFunction<&Cake::AddCake>("AddCake", SurgeReflect::AccessModifier::Public)
 SURGE_REFLECT_CLASS_REGISTER_END(Cake)
 // Here 🔼
-
-//Hackerman code ...
 ```
-It is pretty self explanatory, you just register the members like above with **correct name and access modifier**. Now you can get the juice of your work, everything is ready now, time to use this Reflection!
-In `main.cpp`(or any other code place that is executed), you can query if `Cake` class has a member or not, if it has, then you can get information about that member! Here is a juicy example:
+It is pretty self explanatory, you just register the members and functions like above with **correct name and access modifier**. Now you can get the juice of your work, everything is ready now, time to use this Reflection!
+In `main.cpp`(or any other code place that is executed), you can query if `Cake` class has a member/function or not, if it has, then you can get information about that member/function! Here is a juicy example:
 ```cpp
 //File: main.cpp
 #include "Cake.h"
@@ -80,6 +82,14 @@ int main()
         bool isFloat = typee.EqualTo<float>();   // true
     }
     
+    const SurgeReflect::Function* func = clazz->GetFunction("AddCake");
+    const SurgeReflect::Type& retType = func->GetReturnType();
+
+    std::string name = retType.GetFullName(); // "int"
+    
+    // All the types in "AddCake"'s parameter, in this case it's 'int a' and 'int b'
+    const std::vector<SurgeReflect::Type>& types = func->GetParameterTypes();
+
     // You can iterate through all the registered variables like this
     for (const auto& [name, variable] : clazz->GetVariables())
     {
@@ -90,7 +100,7 @@ int main()
         std::cout << "IsEnum:         " << typee.IsEnum() << '\n';
         std::cout << "IsClass:        " << typee.IsClass() << '\n';
         std::cout << "IsUnion:        " << typee.IsUnion() << '\n';
-        std::cout << "AccessModifier: " << SurgeReflect::AccessModifierToString(variable.GetAccessModifier()) << '\n';
+        std::cout << "AccessModifier: " << AccessModifierToString(variable.GetAccessModifier()) << '\n';
         std::cout << "-------------------------------------------------------" << std::endl;
     }
     

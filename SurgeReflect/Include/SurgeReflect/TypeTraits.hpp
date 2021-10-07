@@ -127,6 +127,23 @@ namespace SurgeReflect
         template <class T>
         static constexpr auto IsTypePrimitive = !IsTypeClass<T> && !IsTypeUnion<T> && !IsTypeEnum<T>;
 
+        template <class... Ts>
+        struct Tuple;
+
+        template <>
+        struct Tuple<>
+        {
+            using Current = void;
+            using Next = Tuple<>;
+        };
+
+        template <class T, class... Ts>
+        struct Tuple<T, Ts...>
+        {
+            using Current = T;
+            using Next = Tuple<Ts...>;
+        };
+
         //////////////////////////////////////////////////////////////////////////
         // Variable Traits
         template <class V>
@@ -146,6 +163,20 @@ namespace SurgeReflect
             using Type = T;
             using ClassType = C;
         };
+
+        // Function Traits
+        template <class F>
+        struct FunctionTraits;
+
+        template <class R, class C, typename... Params>
+        struct FunctionTraits<R (C::*)(Params...)>
+        {
+            using ReturnType = R;
+            using ClassType = C;
+            using ParamTypes = Tuple<Params...>;
+            static constexpr size_t ParamCount = sizeof...(Params);
+        };
+
         //////////////////////////////////////////////////////////////////////////
 
     } // namespace TypeTraits

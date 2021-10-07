@@ -46,7 +46,6 @@ namespace SurgeReflect
         const bool& IsUnion() const { return mIsUnion; }
         const bool& IsPrimitive() const { return mIsPrimitive; }
 
-    private:
         template <typename T>
         void Initialize()
         {
@@ -59,6 +58,7 @@ namespace SurgeReflect
             mHashCode = GenerateStringHash(mFullName);
         }
 
+    private:
         int64_t GenerateStringHash(const std::string& s) const
         {
             int64_t result = 0;
@@ -81,8 +81,14 @@ namespace SurgeReflect
         bool mIsClass = false;
         bool mIsUnion = false;
         bool mIsPrimitive = false;
-
-        friend class Variable;
     };
+
+    template <class T>
+    Type GetType()
+    {
+        Type type;
+        type.Initialize<T>();
+        return type;
+    }
 
 } // namespace SurgeReflect

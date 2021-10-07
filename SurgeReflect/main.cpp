@@ -1,12 +1,5 @@
 #include <iostream>
-#include "SurgeReflect/Reflection.hpp"
-
-struct VecKek
-{
-    float x, y;
-    float e, r;
-    float g, h;
-};
+#include <SurgeReflect/Reflection.hpp>
 
 enum class CakeType
 {
@@ -35,48 +28,50 @@ class TestStruct
 {
 public:
     int X = 0;
-
-protected:
-    VecKek Y = {0.0f, 0.0f};
-    void EatCake() {}
+    int EatCake(int cakeCount, bool forceEat, CakeType typeToEat = CakeType::BigChonk) { return cakeCount; }
 
 private:
-    uint64_t Z = 0;
     CakeType CakeEnum = CakeType::Mud;
+
     SURGE_REFLECTION_ENABLE;
 };
 
 int main()
 {
+    SurgeReflect::Registry::Initialize();
+
+    TestStruct t;
+    t.EatCake(8888, true);
+
     const SurgeReflect::Class* clazz = SurgeReflect::GetReflection<TestStruct>();
     const SurgeReflect::Variable* var = clazz->GetVariable("CakeEnum");
     if (var)
     {
         const SurgeReflect::Type& typee = var->GetType();
 
-        auto name = var->GetName();
-        auto size = var->GetSize();
-        auto isPrimitive = typee.IsPrimitive();
-        auto isEnum = typee.IsEnum();
-        auto isClass = typee.IsClass();
-        auto isUnion = typee.IsUnion();
+        std::string name = var->GetName();
+        uint64_t size = var->GetSize();
+        bool isPrimitive = typee.IsPrimitive();
+        bool isEnum = typee.IsEnum();
+        bool isClass = typee.IsClass();
+        bool isUnion = typee.IsUnion();
         bool isCake = typee.EqualTo<CakeType>();
     }
 
     const SurgeReflect::Function* func = clazz->GetFunction("EatCake");
+    const SurgeReflect::Type& typ = func->GetReturnType();
+    std::string name = typ.GetFullName();
 
-    //DumpVariables(testStruct);
+    const std::vector<SurgeReflect::Type>& types = func->GetParameterTypes();
 
     SurgeReflect::Registry::Shutdown();
 }
 
-// Reflection Register
-
 // clang-format off
+
+// Reflection Register
 SURGE_REFLECT_CLASS_REGISTER_BEGIN(TestStruct)
     .AddVariable<&TestStruct::X>("X", SurgeReflect::AccessModifier::Public)
-    .AddVariable<&TestStruct::Y>("Y", SurgeReflect::AccessModifier::Protected)
-    .AddVariable<&TestStruct::Z>("Z", SurgeReflect::AccessModifier::Private)
+    .AddFunction<&TestStruct::EatCake>("EatCake", SurgeReflect::AccessModifier::Public)
     .AddVariable<&TestStruct::CakeEnum>("CakeEnum", SurgeReflect::AccessModifier::Private)
-    .AddFunction<&TestStruct::EatCake>("EatCake", SurgeReflect::AccessModifier::Protected)
 SURGE_REFLECT_CLASS_REGISTER_END(TestStruct)

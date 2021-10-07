@@ -19,11 +19,12 @@ namespace SurgeReflect
         const Type& GetType() const { return mType; }
 
     private:
-        template <typename T>
+        template <auto Var>
         void Initialize()
         {
-            mSize = sizeof(T);
-            mType.Initialize<T>();
+            using Traits = TypeTraits::VariableTraits<decltype(Var)>;
+            mSize = sizeof(Traits::Type);
+            mType.Initialize<Traits::Type>();
         }
 
     private:

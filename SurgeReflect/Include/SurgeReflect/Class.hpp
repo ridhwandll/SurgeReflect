@@ -21,11 +21,9 @@ namespace SurgeReflect
         template <auto Var>
         Class& AddVariable(const std::string& name, AccessModifier accessModifier)
         {
-            using Traits = TypeTraits::VariableTraits<decltype(Var)>;
-
-            Variable var(name, accessModifier);
-            var.Initialize<Traits::Type>();
-            mVariables[var.GetName()] = var; // Store the variable
+            Variable v(name, accessModifier);
+            v.Initialize<Var>();
+            mVariables[v.GetName()] = v;
             return *this;
         }
 

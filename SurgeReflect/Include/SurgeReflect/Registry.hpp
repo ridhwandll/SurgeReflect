@@ -9,12 +9,13 @@ namespace SurgeReflect
     class Registry
     {
     public:
+        static void Initialize();
         static Registry* Get();
         static void Shutdown();
 
         ~Registry();
         Class* GetClass(const std::string& name);
-        void RegisterClass(Class&& clazz);
+        void RegisterReflectionClass(Class&& clazz);
         void RemoveClass(const std::string& name);
 
     private:

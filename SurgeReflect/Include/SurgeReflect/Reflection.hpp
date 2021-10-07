@@ -18,7 +18,7 @@ private:                                                \
     {                                                                             \
         SurgeReflect::Class& clazz = SurgeReflect::Class(#ClassName);             \
         CookClassData(clazz);                                                     \
-        SurgeReflect::Registry::Get()->RegisterClass(std::move(clazz));           \
+        SurgeReflect::Registry::Get()->RegisterReflectionClass(std::move(clazz)); \
     }                                                                             \
     void ClassName::ReflectionRegister::CookClassData(SurgeReflect::Class& clazz) \
     {                                                                             \

@@ -1,18 +1,25 @@
 // Copyright (c) - SurgeTechnologies - All rights reserved
 #include "SurgeReflect/Registry.hpp"
 #include <assert.h>
+#include <iostream>
 
 namespace SurgeReflect
 {
-    void Registry::RegisterClass(Class&& clazz)
+    static Registry* sInstance = nullptr;
+
+    void Registry::RegisterReflectionClass(Class&& clazz)
     {
-        // Allocate a new class and set that up according to the given class
         GetClass(clazz.GetName())->SetupClass(std::move(clazz));
+    }
+
+    void Registry::Initialize()
+    {
+        if (!sInstance)
+            sInstance = new Registry();
     }
 
     SurgeReflect::Registry* Registry::Get()
     {
-        static Registry* sInstance = nullptr;
         if (!sInstance)
             sInstance = new Registry();
 

@@ -6,14 +6,14 @@
 
 #define SURGE_REFLECTION_ENABLE                         \
 private:                                                \
-    static struct ReflectionRegister                    \
+    struct ReflectionRegister                           \
     {                                                   \
         ReflectionRegister();                           \
         void CookClassData(SurgeReflect::Class& clazz); \
-    } sReflectionRegister
+    };                                                  \
+    inline static ReflectionRegister sReflectionRegister;
 
 #define SURGE_REFLECT_CLASS_REGISTER_BEGIN(ClassName)                             \
-    ClassName::ReflectionRegister ClassName::sReflectionRegister;                 \
     ClassName::ReflectionRegister::ReflectionRegister()                           \
     {                                                                             \
         SurgeReflect::Class& clazz = SurgeReflect::Class(#ClassName);             \
@@ -23,12 +23,9 @@ private:                                                \
     void ClassName::ReflectionRegister::CookClassData(SurgeReflect::Class& clazz) \
     {                                                                             \
         clazz
-
-// clang-format off
+ 
 
 #define SURGE_REFLECT_CLASS_REGISTER_END(ClassName) ;}
-
-// clang-format on
 
 namespace SurgeReflect
 {

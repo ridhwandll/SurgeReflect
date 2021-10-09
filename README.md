@@ -45,8 +45,8 @@ Now reflect, the struct, you **must do the following in a source file(.cpp file)
 #include "Cake.h"
 //Other good code ...
 
-// Global namespace
 // Here 🔽
+// IMPORTANT: Must be in Global namespace
 SURGE_REFLECT_CLASS_REGISTER_BEGIN(Cake)
     .AddVariable<&Cake::Weight>("Weight", SurgeReflect::AccessModifier::Public)
     .AddVariable<&Cake::Price>("Price", SurgeReflect::AccessModifier::Private)

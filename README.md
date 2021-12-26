@@ -24,7 +24,7 @@ If you know all the above mentioned things, integrating SurgeReflect is **dead e
 
 ## Examples
 
-To reflect a `class`(or a `struct`),  declare the `enum` `SURGE_REFLECTION_ENABLE;` inside the class(or a `struct`) like this
+To reflect a `class`(or a `struct`),  declare the `SURGE_REFLECTION_ENABLE;` inside the class(or a `struct`) like this
 ```cpp
 // File: Cake.h
 #include <SurgeReflect/Reflection.hpp>

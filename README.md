@@ -1,5 +1,13 @@
-﻿# SurgeReflect
-A *Fast*, *Portable* and *Easy to use* C++17 Reflection Library
+﻿<p align="center">
+  <picture>
+    <img alt="Surge" src="Docs/Images/SurgeReflect.png" width="500">
+  </picture>
+</p>
+
+<h1 align="center">Surge Reflect</h1>
+<p align="center">
+  <b>A *Fast*, *Portable* and *Easy to use* C++17 Reflection Library</b><br>
+</p>
 
 ## Features
 
@@ -116,7 +124,7 @@ It's mainly targeted towards game engines. It can be used for various purposes, 
 
 ## Projects and products using SurgeReflect
 
-- [Surge](https://discord.gg/kFcyut8ZvR)
+- [Surge](https://github.com/ridhwandll/Surge_Expired)
 
 Feel free to make  a PR or an issue with your project name and link if you are using SurgeReflect!
 

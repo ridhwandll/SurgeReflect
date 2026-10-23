@@ -1,7 +1,6 @@
 // Copyright (c) - SurgeTechnologies - All rights reserved
 #include "SurgeReflect/Registry.hpp"
 #include <assert.h>
-#include <iostream>
 
 namespace SurgeReflect
 {
@@ -49,6 +48,7 @@ namespace SurgeReflect
     void Registry::Shutdown()
     {
         delete Get();
+        sInstance = nullptr;
     }
 
     Registry::~Registry()

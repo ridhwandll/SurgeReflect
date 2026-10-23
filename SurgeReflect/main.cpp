@@ -8,18 +8,34 @@ enum class CakeType
     BigChonk
 };
 
-void DumpVariables(const SurgeReflect::Class* clazz)
+static void Dump(const SurgeReflect::Class* clazz)
 {
+    std::cout << "Class:          " << clazz->GetName() << "\n\n";
+
+    auto dumpType = [](const SurgeReflect::Type& type) {
+        std::cout << "-----Type-----\n";
+        std::cout << "IsPrimitive:    " << type.IsPrimitive() << '\n';
+        std::cout << "IsEnum:         " << type.IsEnum() << '\n';
+        std::cout << "IsClass:        " << type.IsClass() << '\n';
+        std::cout << "IsUnion:        " << type.IsUnion() << '\n';
+        std::cout << "Hash:           " << type.GetHashCode() << '\n';
+    };
+
     for (const auto& [name, variable] : clazz->GetVariables())
     {
         const SurgeReflect::Type& typee = variable.GetType();
-        std::cout << "Name:           " << variable.GetName() << '\n';
-        std::cout << "Size:           " << variable.GetSize() << " bytes" << '\n';
-        std::cout << "IsPrimitive:    " << typee.IsPrimitive() << '\n';
-        std::cout << "IsEnum:         " << typee.IsEnum() << '\n';
-        std::cout << "IsClass:        " << typee.IsClass() << '\n';
-        std::cout << "IsUnion:        " << typee.IsUnion() << '\n';
+        std::cout << "Variable:       " << variable.GetName() << '\n';
         std::cout << "AccessModifier: " << SurgeReflect::AccessModifierToString(variable.GetAccessModifier()) << '\n';
+        std::cout << "Size:           " << variable.GetSize() << " bytes" << '\n';
+        dumpType(typee);
+        std::cout << "-------------------------------------------------------" << std::endl;
+    }
+
+    for (const auto& [name, funk] : clazz->GetFunctions())
+    {
+        std::cout << "Function:       " << funk.GetName() << std::endl;
+        std::cout << "AccessModifier: " << SurgeReflect::AccessModifierToString(funk.GetAccessModifier()) << '\n';
+        dumpType(funk.GetReturnType());
         std::cout << "-------------------------------------------------------" << std::endl;
     }
 }
@@ -43,7 +59,10 @@ int main()
     TestStruct t;
     t.EatCake(8888, true);
 
+
     const SurgeReflect::Class* clazz = SurgeReflect::GetReflection<TestStruct>();
+    Dump(clazz);
+
     const SurgeReflect::Variable* var = clazz->GetVariable("CakeEnum");
     if (var)
     {

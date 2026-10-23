@@ -1,7 +1,8 @@
 // Copyright (c) - SurgeTechnologies - All rights reserved
 #pragma once
+#include "TypeTraits.hpp"
 #include <string>
-#include <functional>
+#include <cstdint>
 
 namespace SurgeReflect
 {
@@ -59,23 +60,23 @@ namespace SurgeReflect
         }
 
     private:
-        int64_t GenerateStringHash(const std::string& s) const
+        constexpr int64_t GenerateStringHash(const std::string_view s) const
         {
-            int64_t result = 0;
-            const int p = 31;
-            const int m = 1e9 + 9;
-            long long pPow = 1;
+            // FNV-1a
+            const uint64_t fnv_prime = 0x100000001B3ULL;
+            uint64_t hash = 0xCBF29CE484222325ULL;
+
             for (char c : s)
             {
-                result = (result + (c - 'a' + 1) * pPow) % m;
-                pPow = (pPow * p) % m;
+                hash ^= static_cast<unsigned char>(c);
+                hash *= fnv_prime;
             }
-            return result;
+            return static_cast<int64_t>(hash);
         }
 
     private:
         std::string mFullName;
-        int64_t mHashCode;
+        int64_t mHashCode = 0;
 
         bool mIsEnum = false;
         bool mIsClass = false;

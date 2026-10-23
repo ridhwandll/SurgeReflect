@@ -6,7 +6,7 @@
 
 <h1 align="center">Surge Reflect</h1>
 <p align="center">
-  <b>A *Fast*, *Portable* and *Easy to use* C++17 Reflection Library</b><br>
+  <b>A Fast, Portable and Easy to use C++17 Reflection Library</b><br>
 </p>
 
 ## Features
@@ -28,7 +28,16 @@ We assume that,
 - You know how to link them to an existing project
 - You know what include directories are in C++ and you know how to set them
 
-If you know all the above mentioned things, integrating SurgeReflect is **dead easy**. Copy all the files from `SurgeReflect` except `main.cpp`(you can look in `main.cpp` for examples), set the include directory  to `SurgeReflect/Source/Include`, compile the project as a shared or a static library, link it to your application and done!
+<br>
+
+If you know all the above mentioned things, integrating SurgeReflect is **dead easy**. Copy all the files from `SurgeReflect` except `main.cpp`(you can look in `main.cpp` for examples),
+set the include directory  to `SurgeReflect/Include`, compile the project(just one cpp file `SurgeReflect/Source/Registry.cpp`) as a static library, link it to your application and done!
+
+<br>
+
+*Note: Do not use the provided CMakeLists.txt file, it is just for testing purposes*
+
+You can also directly embed the `SurgeReflect` folder in your project and use it without compiling it as a library by adding `SurgeReflect/Source/Registry.cpp` to your project files.
 
 ## Examples
 
@@ -51,7 +60,7 @@ Now reflect, the struct, you **must do the following in a source file(.cpp file)
 ```cpp
 // File: Cake.cpp
 #include "Cake.h"
-//Other good code ...
+//Other good(?) code ...
 
 // Here 🔽
 // IMPORTANT: Must be in Global namespace

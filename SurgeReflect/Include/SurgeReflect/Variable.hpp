@@ -29,7 +29,7 @@ namespace SurgeReflect
 
     private:
         std::string mName;
-        AccessModifier mAccessModifier;
+        AccessModifier mAccessModifier = AccessModifier::Private;
         uint64_t mSize = 0;
         Type mType;
 

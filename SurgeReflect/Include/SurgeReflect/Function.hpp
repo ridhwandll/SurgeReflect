@@ -2,6 +2,7 @@
 #pragma once
 #include "SurgeReflect/Type.hpp"
 #include "SurgeReflect/TypeTraits.hpp"
+#include <vector>
 
 namespace SurgeReflect
 {
@@ -35,7 +36,7 @@ namespace SurgeReflect
 
     private:
         std::string mName;
-        AccessModifier mAccessModifier;
+        AccessModifier mAccessModifier = AccessModifier::Private;
 
         Type mReturnType;
         std::vector<Type> mParameterTypes;

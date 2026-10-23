@@ -16,7 +16,7 @@ private:                                                \
 #define SURGE_REFLECT_CLASS_REGISTER_BEGIN(ClassName)                             \
     ClassName::ReflectionRegister::ReflectionRegister()                           \
     {                                                                             \
-        SurgeReflect::Class& clazz = SurgeReflect::Class(#ClassName);             \
+        SurgeReflect::Class clazz(#ClassName);                                    \
         CookClassData(clazz);                                                     \
         SurgeReflect::Registry::Get()->RegisterReflectionClass(std::move(clazz)); \
     }                                                                             \
@@ -38,6 +38,7 @@ namespace SurgeReflect
         {
             assert(false && "The class is not registered/setup in reflection engine! Maybe you forgot to Register the class?");
             Registry::Get()->RemoveClass(className);
+            return nullptr;
         }
         return clazz;
     }

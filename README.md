@@ -1,6 +1,6 @@
 ﻿<p align="center">
   <picture>
-    <img alt="Surge" src="Docs/Images/SurgeReflect.png" width="500">
+    <img alt="Surge" src="Docs/Images/SurgeReflect.png" width="100%">
   </picture>
 </p>
 
@@ -17,6 +17,7 @@
   - **Members** & **Functions** that belongs to a class/struct, with **Access Modifier**
 - Iterate over members **(`clazz->GetVariables()`)**
 - Iterate over functions **(`clazz->GetFunctions()`)**
+- **Enum to string** at compile time, no macros or registration needed **(`SurgeReflect::EnumToString(value)`)**
 - Register only what you need
 - Compiles with MSVC and Clang (should work with GCC too, but not tested)
 - Easy to use API
@@ -123,6 +124,39 @@ int main()
     
 } // int main()
 ```
+
+## Enums
+
+Turn an enum value into its name with `SurgeReflect::EnumToString`. No registration is needed, it works on any enum.
+```cpp
+#include <SurgeReflect/Enum.hpp>
+
+enum class CakeType { Chocolate, Vanilla, Mud };
+
+constexpr std::string_view name = SurgeReflect::EnumToString(CakeType::Mud); // "Mud"
+static_assert(SurgeReflect::EnumToString(CakeType::Vanilla) == "Vanilla");   // Works at compile time too
+```
+Namespaces are stripped, `Surge::ImageUsage::SAMPLED` gives `"SAMPLED"`.
+
+**Value range:** By default, SurgeReflect looks at the values `0` to `15`. If your enum has values outside of this range,
+specialize `SurgeReflect::EnumTraits` for it (the range can have at most 51 values, `Max - Min <= 50`):
+```cpp
+enum class Cake { CHOCOLATE = 400, VANILLA, BUTTERSCOTCH, BLUEBERRY, CHEESE };
+
+namespace SurgeReflect
+{
+    template <>
+    struct EnumTraits<Cake>
+    {
+        static constexpr int Min = 400; // First value of the enum
+        static constexpr int Max = 404; // Last value of the enum
+    };
+}
+```
+Values that are out of range, or that do not have a name, return `"SurgeReflect::EnumToString: Unknown Enum value"`
+(and trigger an `assert` in debug builds when out of range).
+
+*Note: Prefer `enum class Foo` or `enum Foo : int`. Unscoped enums without a fixed underlying type (`enum Foo { ... }`) only work if every value in `[Min, Max]` fits in the enum's value range, otherwise the compiler rejects it. Keep `Min`/`Max` tight for these.*
 
 ## How is this useful?
 

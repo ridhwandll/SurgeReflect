@@ -34,12 +34,7 @@ namespace SurgeReflect
     {
         std::string className = std::string(TypeTraits::GetClassName<T>());
         const Class* clazz = Registry::Get()->GetClass(className);
-        if (!clazz->IsSetup())
-        {
-            assert(false && "The class is not registered/setup in reflection engine! Maybe you forgot to Register the class?");
-            Registry::Get()->RemoveClass(className);
-            return nullptr;
-        }
+        assert(clazz && "The class is not registered/setup in reflection engine! Maybe you forgot to Register the class?");
         return clazz;
     }
 

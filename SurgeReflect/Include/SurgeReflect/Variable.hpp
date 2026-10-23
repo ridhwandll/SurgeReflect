@@ -23,8 +23,8 @@ namespace SurgeReflect
         void Initialize()
         {
             using Traits = TypeTraits::VariableTraits<decltype(Var)>;
-            mSize = sizeof(Traits::Type);
-            mType.Initialize<Traits::Type>();
+            mSize = sizeof(typename Traits::Type);
+            mType.Initialize<typename Traits::Type>();
         }
 
     private:
